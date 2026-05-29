@@ -37,7 +37,7 @@ namespace Obuw13.Modeli
         [NotMapped]
         public string Shapka => $"{Kategoriya.Nazvanie} | {Naimenovanie}";
         [NotMapped]
-        public string CvetFona => Kolichestvo <= 0 ? "" : (Skidka > 15 ? "" : "Transparent");
+        public string CvetFona => Kolichestvo <= 0 ? "LightGreen" : (Skidka > 15 ? "LightBlue" : "Transparent");
         [NotMapped]
         public string NormalnayaCena => Skidka > 0 ? "Collapsed" : "Visible";
         [NotMapped]
@@ -46,7 +46,7 @@ namespace Obuw13.Modeli
             get
             {
                 string papka = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\Kartinki");
-                string put = Path.Combine(papka, Foto ?? "pivture.png");
+                string put = Path.Combine(papka, Foto ?? "picture.png");
 
                 if (!File.Exists(put))
                     put = Path.Combine(papka, "picture.png");
@@ -55,7 +55,7 @@ namespace Obuw13.Modeli
                 img.BeginInit();
                 img.CacheOption = BitmapCacheOption.OnLoad;
                 img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
-                img.UriSource = new Uri(papka,UriKind.Absolute);
+                img.UriSource = new Uri(put,UriKind.Absolute);
                 img.EndInit();
 
                 return img;

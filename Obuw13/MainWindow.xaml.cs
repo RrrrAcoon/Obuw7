@@ -69,7 +69,7 @@ namespace Obuw13
 
             if(ComboFitr.SelectedIndex >0)
             {
-                var ps = ComboFitr.ItemsSource as Postavchik;
+                var ps = ComboFitr.SelectedValue as Postavchik;
                 tovari = tovari.Where(p => p.PostavchikId == ps.Id).ToList();
             }
             if (ComboSort.SelectedIndex == 1) tovari = tovari.OrderBy(p => p.Kolichestvo).ToList();
@@ -126,10 +126,7 @@ namespace Obuw13
             ObnovlenieDannih();
         }
 
-        private void Vibor(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            ObnovlenieDannih();
-        }
+       
 
         private void Dobavit(object sender, RoutedEventArgs e)
         {
@@ -163,8 +160,13 @@ namespace Obuw13
 
         private void ClickEl(object sender, MouseButtonEventArgs e)
         {
-            if (_pol?.RolId == 1 && LvElement.ItemsSource is Tovar)
+            if (_pol?.RolId == 1 && LvElement.SelectedItem is Tovar)
                 OtkritTovar(LvElement.SelectedItem as Tovar);
+        }
+
+        private void Vibor(object sender, SelectionChangedEventArgs e)
+        {
+            ObnovlenieDannih();
         }
     }
 }

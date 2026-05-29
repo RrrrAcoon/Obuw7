@@ -1,12 +1,40 @@
 ﻿<Window x:Class="Obuw13.RedaktTovar"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:m="clr-namespace:Obuw13.Modeli"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Obuw13"
         mc:Ignorable="d"
-        Title="RedaktTovar" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+         Background="#FFFFFF"
+         FontFamily="Arial"
+         WindowStartupLocation="CenterScreen"
+        Icon="/Icon.png"
+        Title="Товар" Height="615" Width="400">
+    <StackPanel Margin="15">
+        <TextBlock x:Name="lbId" Text="ID"/>
+        <TextBox x:Name="txtId" Text="{Binding Id,Mode=OneWay}" IsReadOnly="True"/>
+        <TextBlock Text="Артикул"/>
+        <TextBox Text="{Binding Artikul}"  />
+        <TextBlock Text="Наименование"/>
+        <TextBox Text="{Binding Naimenovanie}"/>
+        <TextBlock Text="Единица измернеия"/>
+        <ComboBox x:Name="ComboEdinica" SelectedValue="{Binding EdinicaIzmereniyaId}" DisplayMemberPath="Nazvanie" SelectedValuePath="Id"/>
+        <TextBlock Text="Поставщик"/>
+        <ComboBox x:Name="ComboPostavchik" SelectedValue="{Binding PostavchikId}" DisplayMemberPath="Nazvanie" SelectedValuePath="Id"/>
+        <TextBlock Text="Производитель"/>
+        <ComboBox x:Name="ComboProizvoditel" SelectedValue="{Binding Proizvoditellid}" DisplayMemberPath="Nazvanie" SelectedValuePath="Id"/>
+        <TextBlock Text="Категория"/>
+        <ComboBox x:Name="ComboKategoriya" SelectedValue="{Binding KategoriyaId}" DisplayMemberPath="Nazvanie" SelectedValuePath="Id"/>
+        <TextBlock Text="Скидка"/>
+        <TextBox Text="{Binding Skidka}" Margin="0,0,0,20"/>
+        <TextBlock Text="Количество"/>
+        <TextBox Text="{Binding Kolichestvo}" Margin="0,0,0,20"/>
+        <TextBlock Text="Описание"/>
+        <TextBox Text="{Binding Opisanie}" Margin="0,0,0,20"/>
+        <Image Source="{Binding PolniyPutKFoto}" Height="100" Margin="0,0,0,20"/>
+        <Button Content="Прикрепить фото"  Click="Foto" Height="30" Margin="0,0,0,20"/>
+
+        <Button Content="Сохранить" Click="Sohranit" Background="LightGreen" Height="30"/>
+    </StackPanel>
 </Window>

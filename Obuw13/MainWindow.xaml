@@ -9,7 +9,8 @@
          Background="#FFFFFF"
  FontFamily="Arial"
  WindowStartupLocation="CenterScreen"
-        Title="Каталог Товаров" Height="600" Width="900" Icon="/Icon.png">
+        Icon="/Icon.png"
+        Title="Каталог Товаров" Height="600" Width="900" >
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
@@ -26,8 +27,8 @@
 
         <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1" x:Name="PanelPoiska">
             <TextBox x:Name="txtPoisk" Width="200" Margin="5" TextChanged="Poisk"/>
-            <ComboBox x:Name="ComboFitr" Width="150" Margin="5" DataContextChanged="Vibor" />
-            <ComboBox x:Name="ComboSort" Width="150" Margin="5" DataContextChanged="Vibor" >
+            <ComboBox x:Name="ComboFitr" Width="150" Margin="5" SelectionChanged="Vibor" />
+            <ComboBox x:Name="ComboSort" Width="150" Margin="5" SelectionChanged="Vibor" >
                 <ComboBoxItem Content="Без сортировки"/>
                 <ComboBoxItem Content="По возростанию"/>
                 <ComboBoxItem Content="По убыванию"/>

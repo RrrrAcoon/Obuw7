@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Obuw13.Modeli;
+using System.Data.Entity;
 
 namespace Obuw13
 {
@@ -28,10 +29,23 @@ namespace Obuw13
             InitializeComponent();
             _pol = pol;
             _db = db;
-
+            if(_pol.RolId==2)
+            {
+                BthDobavit.Visibility = Visibility.Collapsed;
+                BthRedakt.Visibility = Visibility.Collapsed;
+                BthUdalit.Visibility = Visibility.Collapsed;
+            }
+            Zagruzka();
         }
 
-
+        void Zagruzka()
+        {
+            LvElement.ItemsSource = _db.Zakazi
+                .Include(z => z.PunktVidachi)
+                .Include(z => z.StatusZakaza)
+                .Include(z => z.Polzovatel)
+                .ToList();
+        }
         bool OknoUzheOtkrito()
         {
             if (_oknoZakaz != null && _oknoZakaz.IsLoaded)
@@ -43,12 +57,12 @@ namespace Obuw13
             return false;
         }
 
-        void OtkritTovar(Tovar tovar)
+        void OtkritZakaz(Zakaz zakaz)
         {
             if (OknoUzheOtkrito()) return;
-            _oknoZakaz = new RedaktTovar(tovar, _db);
+            _oknoZakaz = new RedaktZakazi(zakaz, _db);
             _oknoZakaz.ShowDialog();
-            ObnovlenieDannih();
+            Zagruzka();
         }
 
         private void Nazad(object sender, RoutedEventArgs e)
@@ -58,39 +72,39 @@ namespace Obuw13
         }
         private void Dobavit(object sender, RoutedEventArgs e)
         {
-            OtkritTovar(null);
+            OtkritZakaz(null);
         }
 
         private void Redakt(object sender, RoutedEventArgs e)
         {
-            var t = LvElement.SelectedItem as Tovar;
-            if (t == null)
+            var z = LvElement.SelectedItem as Zakaz;
+            if (z == null)
             {
-                MessageBox.Show("Выбирите товар!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Выбирите заказ!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            OtkritTovar(t);
+            OtkritZakaz(z);
         }
 
         private void Udalit(object sender, RoutedEventArgs e)
         {
-            var t = LvElement.SelectedItem as Tovar;
-            if (t == null)
+            var z = LvElement.SelectedItem as Zakaz;
+            if (z == null)
             {
-                MessageBox.Show("Выбирите товар!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Выбирите заказ!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
-            if (db.ZakaziTovarov.Any(zt => zt.TovarId == t.Id)) { MessageBox.Show("Товар присутсвует в заказах", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); return; }
-            if (MessageBox.Show("Удалить товар?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
-            db.Tovari.Remove(t);
-            db.SaveChanges();
-            ObnovlenieDannih();
+            if (_db.ZakaziTovarov.Any(zt => zt.ZakazId == z.Id)) { MessageBox.Show("Товар присутсвует в заказах", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error); return; }
+            if (MessageBox.Show("Удалить заказ?", "Подтверждение", MessageBoxButton.YesNo, MessageBoxImage.Question) != MessageBoxResult.Yes) return;
+            _db.Zakazi.Remove(z);
+            _db.SaveChanges();
+            Zagruzka();
         }
 
         private void ClickEl(object sender, MouseButtonEventArgs e)
         {
-            if (_pol?.RolId == 1 && LvElement.ItemsSource is Tovar)
-                OtkritTovar(LvElement.SelectedItem as Tovar);
+            if (_pol?.RolId == 1 && LvElement.SelectedItem is Zakaz)
+                OtkritZakaz(LvElement.SelectedItem as Zakaz);
         }
     }
 }

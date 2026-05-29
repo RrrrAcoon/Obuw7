@@ -11,6 +11,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Obuw13.Modeli;
+using System.Data.Entity;
 
 namespace Obuw13
 {
@@ -19,9 +21,44 @@ namespace Obuw13
     /// </summary>
     public partial class RedaktZakazi : Window
     {
-        public RedaktZakazi()
+        private ObuwKontext _db;
+        private Zakaz _zakaz;
+        public RedaktZakazi(Zakaz zakaz,ObuwKontext db)
         {
             InitializeComponent();
+            _db = db;
+            ComboPunkt.ItemsSource = _db.PunktiVidachi.ToList();
+            ComboClient.ItemsSource = _db.Polzovateli.ToList();
+            ComboStatus.ItemsSource = _db.StatusiZakazov.ToList();
+
+            if (zakaz == null)
+            { 
+                _zakaz= new Zakaz { DataZakaza = DateTime.Now };
+
+                lbArtikul.Visibility= Visibility.Collapsed;
+                txtArtikul.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                _zakaz = zakaz;
+
+            }
+            DataContext = _zakaz;
+
+            
+        }
+
+        private void Sohranit(object sender, RoutedEventArgs e)
+        {
+            if(_zakaz.PunktVidachiId == 0|| _zakaz.PolzovatelId == 0||_zakaz.StatusZakazaId==0)
+            {
+                MessageBox.Show("Заполните все поля!", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+            if(_zakaz.Id==0)_db.Zakazi.Add(_zakaz);
+            _db.SaveChanges();
+            MessageBox.Show("Сохранено", "Успех", MessageBoxButton.OK, MessageBoxImage.Information);
+            Close();
         }
     }
 }
